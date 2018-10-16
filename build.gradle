@@ -17,6 +17,24 @@ allprojects {
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    	compileSdkVersion 28
+    	buildToolsVersion '28.0.3'
+
+	defaultConfig {
+		ndk {
+      			abiFilters 'x86_64'
+		}
+	}
+	sourceSets.main {
+		jniLibs.srcDir 'libs'
+       	}
+       	externalNativeBuild {
+       		ndkBuild {
+               		path 'jni/Android.mk'
+       		}
+       	}
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 }
