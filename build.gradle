@@ -25,9 +25,9 @@ android {
       			abiFilters 'x86_64'
 		}
 	}
-	sourceSets.main {
-		jniLibs.srcDir 'libs'
-       	}
+	//sourceSets.main {
+	//	jniLibs.srcDir 'libs'
+       	//}
        	externalNativeBuild {
        		ndkBuild {
                		path 'jni/Android.mk'
