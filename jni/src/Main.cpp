@@ -1,9 +1,7 @@
 #include <SDL.h>
 #include <iostream>
 
-//Screen dimension constants
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+SDL_Rect screenDims = { 0, 0, 100, 8 };
 
 int main(int argc, char* args[])
 {
@@ -12,8 +10,14 @@ int main(int argc, char* args[])
 		std::cout << "Error while initializing SDL: " << SDL_GetError() << std::endl;
 		return -1;
 	}
-
-	SDL_Window * window = SDL_CreateWindow("SDL Hello World", 0, 0, 640, 480, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
+	/*
+	SDL_DisplayMode display;
+	if( SDL_GetCurrentDisplayMode( 0, &display ) == 0 )
+       	{ 
+		screenDims.w = display.w; screenDims.h = display.h; 
+	}*/
+	SDL_Window * window = SDL_CreateWindow("SDL Hello World", 0, 0, screenDims.w, screenDims.h, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
+	
 	if (window == NULL)
 	{
 		std::cout << "SLD Window could not be created: " << SDL_GetError() << std::endl;
@@ -23,15 +27,26 @@ int main(int argc, char* args[])
 	bool quit = false;
 	SDL_Event e;
 
+	int red = 0xFF;
+	int green = 0x00;
+	int blue = 0x00;
 	while (!quit) {
-		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0) {
-			//User requests quit
-			if (e.type == SDL_QUIT || e.type == SDL_KEYDOWN || e.type == SDL_FINGERDOWN) { quit = true; }
+			if (e.type == SDL_QUIT) { quit = true; }
+			else if (e.type == SDL_FINGERDOWN) {
+				SDL_StartTextInput();
+			}
+			else if (e.type == SDL_TEXTINPUT) {
+				SDL_StopTextInput();
+				if (e.text.text[0] == 'r') {red=0xFF;green=0x00;blue=0x00;}
+				if (e.text.text[0] == 'g') {red=0x00;green=0xFF;blue=0x00;}
+				if (e.text.text[0] == 'b') {red=0x00;green=0x00;blue=0xFF;}
+				if (e.text.text[0] == 'q') quit = true;
+			}
 		}
 
 		SDL_Surface * screenSurface = SDL_GetWindowSurface(window);
-		SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0x00, 0x00));
+		SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, red, green, blue));
 		SDL_UpdateWindowSurface(window);
 	}
 
