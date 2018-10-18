@@ -21,18 +21,22 @@ android {
     	buildToolsVersion '28.0.3'
 
 	defaultConfig {
-		ndk {
-      			abiFilters 'x86_64'
-		}
+		minSdkVersion(20)
 	}
-	//sourceSets.main {
-	//	jniLibs.srcDir 'libs'
-       	//}
        	externalNativeBuild {
        		ndkBuild {
                		path 'jni/Android.mk'
        		}
        	}
+	buildTypes {
+        	debug {
+			debuggable true
+		        jniDebuggable true
+            		ndk {
+              			abiFilters 'x86_64'
+            		}
+        	}
+	}
 }
 
 dependencies {
