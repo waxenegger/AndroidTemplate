@@ -31,7 +31,6 @@ android {
 	buildTypes {
         	debug {
 			debuggable true
-		        jniDebuggable true
             		ndk {
               			abiFilters 'x86_64'
             		}
